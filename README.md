@@ -45,7 +45,88 @@ public class PizzaSimples implements Pizza {
     }
 }
 ```
-### Classe Abstrata
+### Decorator Abstrata
 ```java
+// Abstract Decorator
+public abstract class PizzaDecorator implements Pizza {
+    // A referência para o objeto que estamos decorando
+    protected Pizza pizzaDecorada;
 
+    public PizzaDecorator(Pizza pizza) {
+        this.pizzaDecorada = pizza;
+    }
+
+    // O decorator delega a chamada para o objeto que ele contém
+    @Override
+    public String getDescricao() {
+        return pizzaDecorada.getDescricao();
+    }
+
+    @Override
+    public double getCusto() {
+        return pizzaDecorada.getCusto();
+    }
+}
+```
+### Decorators Concretos
+```java
+public class QueijoExtra extends PizzaDecorator {
+    public QueijoExtra(Pizza pizza) {
+        super(pizza);
+    }
+
+    @Override
+    public String getDescricao() {
+        return super.getDescricao() + ", com queijo extra";
+    }
+
+    @Override
+    public double getCusto() {
+        return super.getCusto() + 5.0;
+    }
+}
+
+public class BordaRecheada extends PizzaDecorator {
+    public BordaRecheada(Pizza pizza) {
+        super(pizza);
+    }
+
+    @Override
+    public String getDescricao() {
+        return super.getDescricao() + ", com borda recheada";
+    }
+
+    @Override
+    public double getCusto() {
+        return super.getCusto() + 8.0;
+    }
+}
+
+```
+### Uso
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Pizza minhaPizza = new PizzaSimples();
+        System.out.println(minhaPizza.getDescricao() + " | Custo: R$" + minhaPizza.getCusto());
+
+        minhaPizza = new QueijoExtra(minhaPizza);
+        System.out.println(minhaPizza.getDescricao() + " | Custo: R$" + minhaPizza.getCusto());
+
+        minhaPizza = new BordaRecheada(minhaPizza);
+        System.out.println(minhaPizza.getDescricao() + " | Custo: R$" + minhaPizza.getCusto());
+
+        Pizza outraPizza = new BordaRecheada(new PizzaSimples());
+        System.out.println(outraPizza.getDescricao() + " | Custo: R$" + outraPizza.getCusto());
+    }
+}
+
+```
+### Saída
+```java
+Pizza de massa fina | Custo: R$30.0
+Pizza de massa fina, com queijo extra | Custo: R$35.0
+Pizza de massa fina, com queijo extra, com borda recheada | Custo: R$43.0
+Pizza de massa fina, com borda recheada | Custo: R$38.0
 ```
